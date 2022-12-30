@@ -25,8 +25,8 @@ Ensure existence of a valid Dockerfile in root directory and applicable versions
 
 Can create the docker image with:
 
-```console
-docker build -t corpus-x . # Will look for Dockerfile inside the . folder
+```sh
+docker build -t lawdata-local . # Will look for Dockerfile inside the . folder
 ```
 
 This will start the build process. If successful, the docker image will be built and appear in the list of Docker Images found in VS Code's Docker extension.
@@ -44,14 +44,14 @@ docker run \
   -e LITESTREAM_ACCESS_KEY_ID \
   -e LITESTREAM_SECRET_ACCESS_KEY \
   -e LAWSQL_BOT_TOKEN \
-  corpus-x
+  lawdata-local
 ```
 
 ## restore via run.sh
 
-The dockerfile terminates with [run.sh](./scripts/run.sh).
+The [Dockerfile](../Dockerfile) terminates with [run.sh](./scripts/run.sh).
 
-Since, on initialization, the sqlite database file doesn't exist yet, it will use litestream's `restore` command to copy the aws variant to local container.
+Since, on initialization, the sqlite database file doesn't exist yet, it will use litestream's `restore` command to copy the AWS variant to a local container.
 
 ```console
 No database found, restoring from replica if exists
@@ -66,14 +66,22 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
 ```
 
-## test access on local running container
+## test access on a running container
 
 ### unauthorized
 
-This results in `HTTP/1.1 403 Forbidden`:
+```sh
+curl -IX get localhost:8080/x.json
+```
+
+Produces a **HTTP/1.1  403** (_FORBIDDEN_) http status code:
 
 ```sh
-curl -vso /dev/null localhost:8080/x.json
+HTTP/1.1 403 Forbidden
+date: x x x
+server: uvicorn
+content-type: text/html; charset=utf-8
+Transfer-Encoding: chunked
 ```
 
 ### authorized
@@ -81,5 +89,6 @@ curl -vso /dev/null localhost:8080/x.json
 With xxx as `LAWSQL_BOT_TOKEN`, this results in a list of tables from restored the `x.db` via datasette + litestream:
 
 ```sh
-curl -H 'Authorization: Bearer xxx' localhost:8080/x.json | jq
+export token=<whatever-value-of-LAWSQL_BOT_TOKEN>
+curl -H 'Authorization: Bearer ${token}' localhost:8080/x.json | jq
 ```

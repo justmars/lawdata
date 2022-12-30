@@ -105,18 +105,9 @@ image size: 323 MB
 --> You can detach the terminal anytime without stopping the deployment
 ```
 
-## test
+## test access on deployed app
 
-### authorized access
-
-With the url set at: `corpus-x.fly.dev`, the database file at `x.db`, and the secret previously set for `LAWSQL_BOT_TOKEN`, can test a json list of tables with:
-
-```sh
-export token=<whatever-value-of-LAWSQL_BOT_TOKEN>
-curl -H "Authorization: Bearer ${token}" https://corpus-x.fly.dev/x.json | jq
-```
-
-### unauthorized access
+### unauthorized
 
 Without token:
 
@@ -133,4 +124,13 @@ server: Fly/x x x
 content-type: text/html; charset=utf-8
 via: 2 fly.io
 fly-request-id: x x x-sin
+```
+
+### authorized
+
+With the url set at: `corpus-x.fly.dev`, the database file at `x.db`, and the secret previously set for `LAWSQL_BOT_TOKEN`, can test a json list of tables with:
+
+```sh
+export token=<whatever-value-of-LAWSQL_BOT_TOKEN>
+curl -H "Authorization: Bearer ${token}" https://corpus-x.fly.dev/x.json | jq
 ```
