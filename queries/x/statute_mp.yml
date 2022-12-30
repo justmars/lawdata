@@ -1,4 +1,4 @@
-title: Get statute mp
+title: Material path statute unit rows
 description: |
   Creates endpoint `/x/statute_mp.json?`, requires `_shape=array`.
   Produces rows consisting of the material path `mp` of a `statute_id`

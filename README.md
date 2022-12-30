@@ -12,9 +12,11 @@ Production on Fly | [3](./docs/3-secure-fly.md)
 
 ## Queries
 
-Instead of creating SQL queries within the [metadata config file](etc/metadata.yml), because of `datasette-query-files`, I use a separate folder [/queries](/queries/) wherein each pairing of `.sql` and `.yml` files creates a canned API endpoint.
+Unlike a default datasette instance, canned SQL queries are not found in the [metadata config file](etc/metadata.yml).
 
-This setup makes it easier to write .sql files in VSCode with extensions: [dbt formatter](https://github.com/henriblancke/vscode-dbt-formatter) dependent on [vscode-dbt](https://github.com/bastienboutonnet/vscode-dbt.git):
+The `datasette-query-files` plugin allows us to use a separate folder (see [/queries](/queries/)) where each pairing of `.sql` and `.yml` becomes its own canned API endpoint.
+
+This setup makes it easier to write .sql files in VSCode with extensions ([dbt formatter](https://github.com/henriblancke/vscode-dbt-formatter) dependent on [vscode-dbt](https://github.com/bastienboutonnet/vscode-dbt.git)):
 
 ```json
 // settings.json
@@ -23,4 +25,4 @@ This setup makes it easier to write .sql files in VSCode with extensions: [dbt f
 }
 ```
 
-The sqlite expressions are complex, making use of [JSON1](https://www.sqlite.org/json1.html) and [FTS5](https://www.sqlite.org/fts5.html) sqlite3 extensions.
+The sqlite expressions are complex, making use of [JSON1](https://www.sqlite.org/json1.html) and [FTS5](https://www.sqlite.org/fts5.html) extensions.

@@ -20,5 +20,7 @@ allow:
 Assuming you've restored the database from aws or have a local file to a `<db-path>`, access the datasette instance:
 
 ```sh
-datasette <db-path> -m etc/metadata.yml
+datasette \
+--root \
+-m etc/metadata.yml <db-path>
 ```

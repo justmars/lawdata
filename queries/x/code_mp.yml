@@ -1,4 +1,4 @@
-title: Get code mp
+title: Material path code unit rows
 description: |
   Creates endpoint `/x/code_mp.json?`, requires `_shape=array`.
   Produces rows consisting of the material path `mp` of a `code_id`
