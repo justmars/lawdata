@@ -1,0 +1,38 @@
+title: Law Data
+description: Authenticated access to the main database.
+plugins:
+  datasette-auth-tokens:
+    tokens:  # note this is a list; each token is a combination of two keys
+    - token:
+        $env: LAWSQL_BOT_TOKEN
+      actor:
+        bot_id: "lex-bot"  # allowed actor trying to access the datasette
+databases:
+  x:
+    allow:
+      bot_id: "lex-bot" # allowed actor to access x.db if token included in request
+    tables:
+      sc_tbl_decisions:
+        title: Decisions
+        description: Decisions of the Supreme Court of the Philippines
+      sc_tbl_citations:
+        title: Citations
+        description: Citations which identify Decisions
+      sc_tbl_justices:
+        title: Justices
+        description: Justices involved in Decisions
+      sc_tbl_opinions:
+        title: Opinions
+        description: Opinions included in Decisions
+      sc_tbl_tags:
+        title: Title Tags
+        description: Preliminary tags categorizing Decisions
+      sc_tbl_votelines:
+        title: Vote Lines
+        description: Combination of Justices and their Vote in Decisions
+      lex_tbl_statutes:
+        title: Statutes
+        description: Structured, serialized content from rule-making authorities
+      lex_tbl_codifications:
+        title: Codifications
+        description: Annotated statutes with events from both Statutes and Decisions

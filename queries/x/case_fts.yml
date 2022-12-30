@@ -1,0 +1,9 @@
+title: Full text search decisions
+description: |
+  Creates endpoint `/x/case_fts.json?`
+  Produces rows ordered by date of the decision
+hide_sql: true
+params:
+- q
+- start
+- end

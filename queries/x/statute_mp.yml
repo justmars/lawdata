@@ -1,0 +1,8 @@
+title: Get statute mp
+description: |
+  Creates endpoint `/x/statute_mp.json?`, requires `_shape=array`.
+  Produces rows consisting of the material path `mp` of a `statute_id`
+hide_sql: true
+params:
+- statute_id
+- mp

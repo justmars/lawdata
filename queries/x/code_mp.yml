@@ -1,0 +1,8 @@
+title: Get code mp
+description: |
+  Creates endpoint `/x/code_mp.json?`, requires `_shape=array`.
+  Produces rows consisting of the material path `mp` of a `code_id`
+hide_sql: true
+params:
+- code_id
+- mp

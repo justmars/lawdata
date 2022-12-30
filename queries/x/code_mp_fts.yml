@@ -1,0 +1,9 @@
+title: Full text search codification units
+description: |
+  Creates endpoint `/x/code_mp_fts.json?`.
+  Full-text searches on codification material paths
+hide_sql: true
+params:
+- q
+- start
+- end

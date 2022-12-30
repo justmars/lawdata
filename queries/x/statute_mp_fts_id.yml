@@ -1,0 +1,8 @@
+title: Full text search statute units within a specified statute
+description: |
+  Creates endpoint `/x/statute_mp_fts_id.json?`.
+  Full-text searches on statutory material paths within a `statute_id`
+hide_sql: true
+params:
+- q
+- statute_id
