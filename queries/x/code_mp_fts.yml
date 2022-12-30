@@ -1,4 +1,4 @@
-title: Full text search codification units
+title: Full text search code units
 description: |
   Creates endpoint `/x/code_mp_fts.json?`.
   Full-text searches on codification material paths

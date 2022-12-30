@@ -9,9 +9,13 @@ plugins:
         bot_id: "lex-bot"  # allowed actor trying to access the datasette
 databases:
   x:
-    allow:
-      bot_id: "lex-bot" # allowed actor to access x.db if token included in request
+    #allow:
+      #bot_id: "lex-bot" # allowed actor to access x.db if token included in request
     tables:
+      _litestream_lock:
+        hidden: true
+      _litestream_seq:
+        hidden: true
       sc_tbl_decisions:
         title: Decisions
         description: Decisions of the Supreme Court of the Philippines

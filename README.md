@@ -12,6 +12,15 @@ Production on Fly | [3](./docs/3-secure-fly.md)
 
 ## Queries
 
-With `datasette-query-files`, instead of creating SQL queries within the [metadata config file](etc/metadata.yml), can use a separate folder [/queries](/queries/) wherein each pairing of `.sql` and `.yml` files creates a canned API endpoint.
+Instead of creating SQL queries within the [metadata config file](etc/metadata.yml), because of `datasette-query-files`, I use a separate folder [/queries](/queries/) wherein each pairing of `.sql` and `.yml` files creates a canned API endpoint.
 
-This is useful since the sqlite queries involved span several lines, taking advantage of [JSON1](https://www.sqlite.org/json1.html) and [FTS5](https://www.sqlite.org/fts5.html) extensions.
+This setup makes it easier to write .sql files in VSCode with extensions: [dbt formatter](https://github.com/henriblancke/vscode-dbt-formatter) dependent on [vscode-dbt](https://github.com/bastienboutonnet/vscode-dbt.git):
+
+```json
+// settings.json
+"files.associations": {
+  "**/*.sql": "jinja-sql",
+}
+```
+
+The sqlite expressions are complex, making use of [JSON1](https://www.sqlite.org/json1.html) and [FTS5](https://www.sqlite.org/fts5.html) sqlite3 extensions.
