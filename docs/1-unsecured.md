@@ -2,6 +2,8 @@
 
 ## optional: restore database from aws to local root folder
 
+If database cannot be found in the client device:
+
 ```sh
 export LITESTREAM_ACCESS_KEY_ID=xxx
 export LITESTREAM_SECRET_ACCESS_KEY=yyy

@@ -29,7 +29,7 @@ fly volumes list
 
 ## setup config
 
-Review the contents of [fly.toml](../fly.toml), specifically the `app_name` and the `mount.source`
+Review [fly.toml](../fly.toml), specifically `app_name` and `mount.source`
 
 ```toml
 app = "corpus-x" # this was the name set during creation of the app
@@ -40,7 +40,7 @@ source = "corpus_x_data" # this was the name set during creation of the app's vo
 destination = "/data" # this is the folder to be created in the app for persistent storage
 ```
 
-## add certificate
+## add certificate to production url
 
 lawdata.xyz = corpus-x.fly.dev
 
@@ -49,15 +49,16 @@ lawdata.xyz = corpus-x.fly.dev
 Set the environment variables of the app:
 
 ```sh
-fly --app corpus-x secrets set \
-LITESTREAM_ACCESS_KEY_ID=x \
-LITESTREAM_SECRET_ACCESS_KEY=y \
-LAWSQL_BOT_TOKEN=z
+fly --app corpus-x secrets import < .env
 ```
 
-The `LITESTREAM_ACCESS_KEY_ID` and `LITESTREAM_SECRET_ACCESS_KEY` aws credentials are used by _litestream.io_ to [restore a replica](/scripts/run.sh) of a previously saved and replicated database to the volume created.
+See [example .env file](./../.env.example) which outlines 5 variables that serve the following purposes
 
-The `LAWSQL_BOT_TOKEN` is the credential needed to query the database after it is restored.
+vars | purpose
+:--:|:--:
+`LITESTREAM_ACCESS_KEY_ID` & `LITESTREAM_SECRET_ACCESS_KEY`  | aws credentials are used by _litestream.io_ to [restore a replica](/scripts/run.sh) of a previously saved and replicated database to the volume created
+ `LAWSQL_BOT_TOKEN` | credential needed to query the database after it is restored with a Bearer Token through [datasette-auth-tokens plugin](https://github.com/simonw/datasette-auth-tokens)
+`DATASETTE_GITHUB_AUTH_CLIENT_ID` & `DATASETTE_GITHUB_AUTH_CLIENT_SECRET` | credentials needed to access the production url through [datasette-auth-github plugin](https://github.com/simonw/datasette-auth-github)
 
 ## build local image then deploy to fly
 
