@@ -1,0 +1,8 @@
+title: Codification list with excerpts
+description: |
+  Creates endpoint `/x/code_list.json?`
+  Produces rows ordered by date of the codification
+hide_sql: true
+params:
+- start
+- end

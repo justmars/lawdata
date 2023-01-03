@@ -7,10 +7,17 @@ plugins:
         $env: LAWSQL_BOT_TOKEN
       actor:
         bot_id: "lex-bot"  # allowed actor trying to access the datasette
+  datasette-auth-github:
+    client_id:
+      $env: DATASETTE_GITHUB_AUTH_CLIENT_ID
+    client_secret:
+      $env: DATASETTE_GITHUB_AUTH_CLIENT_SECRET
+    ...: ... # enables access, requires gh_login in allow
 databases:
   x:
-    #allow:
-      #bot_id: "lex-bot" # allowed actor to access x.db if token included in request
+    allow:
+      gh_login: justmars # allowed actor with datasette-auth-github
+      bot_id: "lex-bot" # allowed actor to access x.db if token included in request with datasette-auth-tokens
     tables:
       _litestream_lock:
         hidden: true
