@@ -11,9 +11,10 @@ ARG LITESTREAM_VER=0.3.9
 ADD https://github.com/benbjohnson/litestream/releases/download/v$LITESTREAM_VER/litestream-v$LITESTREAM_VER-linux-amd64-static.tar.gz /tmp/litestream.tar.gz
 RUN tar -C /usr/local/bin -xzf /tmp/litestream.tar.gz
 
-# see latest version - https://www.sqlite.org/download.html (note JSON1 + FTS5 extensions)
-ARG SQLITE_VER=3400000
-RUN wget "https://www.sqlite.org/2022/sqlite-autoconf-$SQLITE_VER.tar.gz" \
+# see latest version - https://www.sqlite.org/download.html (note JSON1 + FTS5 extensions), if not cached: ~418s
+ARG SQLITE_YEAR=2022
+ARG SQLITE_VER=3400100
+RUN wget "https://www.sqlite.org/$SQLITE_YEAR/sqlite-autoconf-$SQLITE_VER.tar.gz" \
   && tar xzf sqlite-autoconf-$SQLITE_VER.tar.gz \
   && cd sqlite-autoconf-$SQLITE_VER \
   && ./configure --disable-static --enable-fts5 --enable-json1 CFLAGS="-g -O2 -DSQLITE_ENABLE_JSON1" \
@@ -55,7 +56,7 @@ COPY queries/x /queries/x
 # copy Datasette metadata file
 COPY etc/metadata.yml $METADATA_PATH
 
-# the run file executes the litestream pull from the replica url and then runs the datasette instance
+# run.sh executes litestream pull from replica url () and then runs the datasette instance
 ARG RUNFILE=/scripts/run.sh
 COPY scripts/run.sh $RUNFILE
 RUN chmod 777 $RUNFILE
