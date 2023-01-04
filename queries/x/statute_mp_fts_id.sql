@@ -46,6 +46,36 @@ snippet_data AS (
   WHERE
     sx3.id = sx2.id
     AND lex_tbl_statute_fts_units_fts match escape_fts(:q)
+),
+title_data AS (
+  SELECT
+    json_group_array(
+      json_object(
+        'item',
+        tbl.units -> t.path ->> '$.item',
+        'caption',
+        IFNULL(
+          tbl.units -> t.path ->> '$.caption',
+          ''
+        )
+      )
+    ) item_captions
+  FROM
+    lex_tbl_statutes tbl,
+    json_tree(
+      tbl.units,
+      '$'
+    ) t
+  WHERE
+    tbl.id = :statute_id
+    AND t.key = 'id'
+    AND sx2.material_path LIKE t.value || '%'
+    AND LENGTH(
+      t.value
+    ) <= LENGTH(
+      sx2.material_path
+    )
+    AND t.value != '1.'
 )
 SELECT
   (
@@ -64,6 +94,12 @@ SELECT
     FROM
       snippet_data
   ) snippet,
+  (
+    SELECT
+      item_captions
+    FROM
+      title_data
+  ) title_data,
   (
     SELECT
       max_count
