@@ -1,4 +1,5 @@
 WITH rowids_match_q AS (
+  -- layer 1: create row numbers for each matching unit statute id
   SELECT
     ROW_NUMBER() over (
       ORDER BY
@@ -15,6 +16,7 @@ WITH rowids_match_q AS (
     AND lex_tbl_statute_fts_units_fts match escape_fts(:q)
 ),
 rowids_match_range AS (
+  -- layer 2: limit result set to start and end rows
   SELECT
     rn,
     row_idx,
@@ -30,6 +32,8 @@ rowids_match_range AS (
     )
 ),
 snippet_data AS (
+  -- layer 3: for each matching row unit_id from the terminal layer, get the snippet
+  -- this step prevents the computation of snippet data for every row since it is limited by the range
   SELECT
     snippet(
       lex_tbl_statute_fts_units_fts,
@@ -48,6 +52,8 @@ snippet_data AS (
     AND lex_tbl_statute_fts_units_fts match escape_fts(:q)
 ),
 title_data AS (
+  -- layer 4: for each matching row unit_id from the terminal layer, get the title data
+  -- the title data consists of item, caption pairings
   SELECT
     json_group_array(
       json_object(
@@ -78,6 +84,7 @@ title_data AS (
     AND t.value != '1.'
 )
 SELECT
+  -- layer 5: the terminal layer
   (
     SELECT
       rn
