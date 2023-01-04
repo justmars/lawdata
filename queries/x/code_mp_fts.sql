@@ -6,8 +6,11 @@ WITH rowids_match_q AS (
     -- the codification date
     ROW_NUMBER() over (
       ORDER BY
-        c0.date DESC
+        COUNT(
+          c0.id
+        ) DESC
     ) rn,
+    -- ordering is done by the number of units wherein the search phrase appears
     COUNT(*) over () max_count,
     -- total number of rows that is returned
     COUNT(

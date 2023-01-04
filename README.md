@@ -4,15 +4,15 @@ Assuming access to a database built with [corpus-x](https://github.com/justmars/
 
 ## Mode
 
-Location | Description | Instructions
+Access Method | Description | Instructions
 :--|:--|:--:
-.venv | virtual environment | [1](./docs/1-unsecured.md)
-Docker | local container | [2](./docs/2-secure-local.md)
-fly.io | remote container  | [3](./docs/3-secure-fly.md)
+.venv on device | virtual environment | [1](./docs/1-unsecured.md)
+Docker on device | local container | [2](./docs/2-secure-local.md)
+fly.io on cloud | remote container  | [3](./docs/3-secure-fly.md)
 
 ## Queries
 
-Unlike a default Datasette instance, canned SQL queries will not be found in the [metadata config file](etc/metadata.yml).
+Unlike a default Datasette instance, canned SQL queries will _not_ be found in the [metadata config file](etc/metadata.yml).
 
 The `datasette-query-files` [plugin](https://github.com/eyeseast/datasette-query-files) allows us to use a separate folder (see [/queries](/queries/)) where each pairing of `.sql` and `.yml` becomes its own canned API endpoint.
 
