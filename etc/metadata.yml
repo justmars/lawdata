@@ -1,5 +1,7 @@
 title: Law Data
 description: Authenticated access to the main database.
+source: Philippine Supreme Court
+source_url: https://elibrary.judiciary.gov.ph/
 plugins:
   datasette-auth-tokens:
     tokens:  # note this is a list; each token is a combination of two keys
@@ -26,24 +28,41 @@ databases:
       sc_tbl_decisions:
         title: Decisions
         description: Decisions of the Supreme Court of the Philippines
+        size: 20
       sc_tbl_citations:
         title: Citations
         description: Citations which identify Decisions
+        size: 20
       sc_tbl_justices:
         title: Justices
         description: Justices involved in Decisions
+        size: 15
       sc_tbl_opinions:
         title: Opinions
         description: Opinions included in Decisions
+        size: 10
       sc_tbl_tags:
         title: Title Tags
         description: Preliminary tags categorizing Decisions
+        size: 20
       sc_tbl_votelines:
         title: Vote Lines
         description: Combination of Justices and their Vote in Decisions
+        size: 50
       lex_tbl_statutes:
         title: Statutes
         description: Structured, serialized content from rule-making authorities
+        size: 1
+        columns:
+          statute_category: e.g. ra (republic act), ca (commonwealth act), etc.
+          statute_serial_id: e.g. 386, 141, etc.
+          date: The date that statute is published / promulgated
+          variant: Ordinarily, the combination of category, serial, and date would establish uniqueness. In exceptional cases, a variant is necessary.
       lex_tbl_codifications:
         title: Codifications
         description: Annotated statutes with events from both Statutes and Decisions
+        size: 1
+        columns:
+          statute_id: The statute id that has been codified
+          date: The date that codification is published; this is different from the date of the base statute id
+          variant: Operates as a version number in case the author/s publish an update with the same publication date
