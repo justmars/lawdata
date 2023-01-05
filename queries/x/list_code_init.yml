@@ -1,6 +1,6 @@
-title: Codification list basic
+title: List codifications
 description_html: |
-  <p>Creates endpoint <pre>/x/code_list_init.json?</pre></p>
+  <p>Creates endpoint <pre>/x/list_code_init.json?</pre></p>
 
   <p>Produces paginated rows that can be used for syncing with target database</p>
 

@@ -1,6 +1,7 @@
-title: List statutes
+title: |
+  List decisions
 description: |
-  Creates endpoint `/x/list_stat_init.json?`
+  Creates endpoint `/x/list_case_init.json?`
   Produces paginated rows that can be used for syncing with target database
 hide_sql: true
 params:
