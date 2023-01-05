@@ -1,7 +1,16 @@
 title: Codification list basic
-description: |
-  Creates endpoint `/x/code_list_init.json?`
-  Produces paginated rows that can be used for syncing with target database
+description_html: |
+  <p>Creates endpoint <pre>/x/code_list_init.json?</pre></p>
+
+  <p>Produces paginated rows that can be used for syncing with target database</p>
+
+  <p>Each Codification row shall contain:</p>
+  <ul>
+  <li>A base `statute id`</li>
+  <li>A list of `author ids` representing individuals who've configured the base statute</li>
+  <li>A list of `statute ids` that have been associated with this Codification by the authors</li>
+  <li>A list of `decision ids` that have been associated with this Codification by the authors</li>
+  </ul>
 hide_sql: true
 params:
 - start

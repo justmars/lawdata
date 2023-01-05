@@ -44,6 +44,15 @@ statute_ids AS (
     lex_tbl_codification_events_statute
   WHERE
     codification_id = code.id
+),
+decision_ids AS (
+  -- list of decision ids that are referenced by each codification
+  SELECT
+    DISTINCT(affector_decision_id) ids
+  FROM
+    lex_tbl_codification_events_citation
+  WHERE
+    codification_id = code.id
 )
 SELECT
   (
@@ -62,7 +71,13 @@ SELECT
     LIMIT
       1
   ) max_row, -- number of total rows
-  code.id, code.statute_id, code.date, code.title, code.description, code.variant, (
+  code.id, -- preconfigured id
+  code.statute_id, -- base statute id
+  code.date, -- date the code was published,
+  code.title, -- title given by the author
+  code.description, -- description given by the author
+  code.variant, -- integer signifying version number
+  (
     SELECT
       json_group_array(ids)
     FROM
@@ -73,7 +88,13 @@ SELECT
       json_group_array(ids)
     FROM
       statute_ids
-  ) statute_ids
+  ) statute_ids,
+  (
+    SELECT
+      json_group_array(ids)
+    FROM
+      decision_ids
+  ) decision_ids
 FROM
   lex_tbl_codifications code
 WHERE
