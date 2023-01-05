@@ -1,8 +1,0 @@
-title: Statute list with excerpts
-description: |
-  Creates endpoint `/x/statute_list.json?`
-  Produces rows ordered by date of the statute
-hide_sql: true
-params:
-- start
-- end

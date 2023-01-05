@@ -1,0 +1,8 @@
+title: Statute list basic
+description: |
+  Creates endpoint `/x/code_list_init.json?`
+  Produces paginated rows that can be used for syncing with target database
+hide_sql: true
+params:
+- start
+- end
