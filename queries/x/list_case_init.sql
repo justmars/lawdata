@@ -56,9 +56,11 @@ SELECT
   caso.origin, -- the id from the original source
   caso.source, -- whether sc or legacy
   caso.id, -- preconfigured id
-  caso.date, -- date the caso was published,
+  caso.date, -- date the caso was published
   caso.title, -- title of the caso
   caso.description, -- the citation string
+  caso.category, -- whether decision or resolution
+  caso.composition, -- whether en banc or division
   (
     SELECT
       json_group_array(ids)
