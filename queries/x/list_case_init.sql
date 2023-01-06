@@ -53,18 +53,26 @@ SELECT
     LIMIT
       1
   ) max_row, -- number of total rows
+  caso.origin, -- the id from the original source
+  caso.source, -- whether sc or legacy
   caso.id, -- preconfigured id
   caso.date, -- date the caso was published,
-  caso.title, -- title given by the author
-  caso.description, -- description given by the author
+  caso.title, -- title of the caso
+  caso.description, -- the citation string
   (
     SELECT
       json_group_array(ids)
     FROM
       author_ids
-  ) author_ids
+  ) author_ids,
+  cite.docket,
+  cite.scra,
+  cite.phil,
+  cite.offg
 FROM
   sc_tbl_decisions caso
+  JOIN sc_tbl_citations cite
+  ON caso.id = cite.decision_id
 WHERE
   caso.id IN (
     SELECT

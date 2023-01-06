@@ -53,7 +53,14 @@ SELECT
     LIMIT
       1
   ) max_row, -- number of total rows
-  stat.id, stat.date, stat.title, stat.description, stat.variant, (
+  stat.id, -- preconfigured id
+  stat.date, -- date statute is published
+  stat.title, -- the statute's serial title
+  stat.description, -- the statute's official title
+  stat.variant, -- helps distinguish statutes with same category, serial_id, and date
+  stat.statute_category, -- whether ra, eo, etc
+  stat.statute_serial_id, -- paired with category
+  (
     SELECT
       json_group_array(ids)
     FROM
