@@ -65,6 +65,7 @@ SELECT
   art.date, -- date article is published
   art.title, -- the article's title
   art.description, -- the article's summary
+  art.content, -- the article's content
   (
     SELECT
       json_group_array(ids)
