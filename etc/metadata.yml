@@ -4,11 +4,11 @@ source: Philippine Supreme Court
 source_url: https://elibrary.judiciary.gov.ph/
 plugins:
   datasette-auth-tokens:
-    tokens:  # note this is a list; each token is a combination of two keys
-    - token:
-        $env: LAWSQL_BOT_TOKEN
-      actor:
-        bot_id: "lex-bot"  # allowed actor trying to access the datasette
+    tokens: # note this is a list; each token is a combination of two keys
+      - token:
+          $env: LAWSQL_BOT_TOKEN
+        actor:
+          bot_id: "lex-bot" # allowed actor trying to access the datasette
   datasette-auth-github:
     client_id:
       $env: DATASETTE_GITHUB_AUTH_CLIENT_ID
