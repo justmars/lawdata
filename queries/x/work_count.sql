@@ -44,6 +44,8 @@ SELECT
     json_object(
       'object',
       'codification',
+      'verb',
+      'authored',
       'count',
       (
         SELECT
@@ -55,6 +57,8 @@ SELECT
     json_object(
       'object',
       'statute',
+      'verb',
+      'formatted',
       'count',
       (
         SELECT
@@ -66,6 +70,8 @@ SELECT
     json_object(
       'object',
       'decision',
+      'verb',
+      'formatted',
       'count',
       (
         SELECT
@@ -77,6 +83,8 @@ SELECT
     json_object(
       'object',
       'article',
+      'verb',
+      'authored',
       'count',
       (
         SELECT
