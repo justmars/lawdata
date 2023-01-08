@@ -42,7 +42,9 @@ SELECT
   mem.id,
   json_array(
     json_object(
-      'codifications',
+      'object',
+      'codification',
+      'count',
       (
         SELECT
           num
@@ -51,7 +53,9 @@ SELECT
       )
     ),
     json_object(
-      'statutes',
+      'object',
+      'statute',
+      'count',
       (
         SELECT
           num
@@ -60,7 +64,9 @@ SELECT
       )
     ),
     json_object(
-      'decisions',
+      'object',
+      'decision',
+      'count',
       (
         SELECT
           num
@@ -69,7 +75,9 @@ SELECT
       )
     ),
     json_object(
-      'articles',
+      'object',
+      'article',
+      'count',
       (
         SELECT
           num
