@@ -1,0 +1,7 @@
+title: Work count per member
+description: |
+  Creates endpoint `/x/work_count.json?`, requires `_shape=array`.
+  Produces rows consisting of the id of the member, if supplied
+hide_sql: true
+params:
+- member_id
