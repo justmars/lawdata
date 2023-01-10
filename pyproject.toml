@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 python-dotenv = "^0.21"
-datasette = "^0.63.3"
+datasette = "^0.64"
 datasette-pretty-json = "^0.2.2"
 datasette-auth-tokens = "^0.3"
 datasette-auth-github = "^0.13.1"

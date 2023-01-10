@@ -135,14 +135,14 @@ files = [
 
 [[package]]
 name = "datasette"
-version = "0.63.3"
+version = "0.64"
 description = "An open source multi-tool for exploring and publishing data"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "datasette-0.63.3-py3-none-any.whl", hash = "sha256:50379a3ef352e108fc31ef8c89fc632b6bad4ef7d3e2e6c3b40fba78e9ee5faf"},
-    {file = "datasette-0.63.3.tar.gz", hash = "sha256:fc6a37c73d0d08e9240211a24893eb09886b84427be1ad2295a67be231175af3"},
+    {file = "datasette-0.64-py3-none-any.whl", hash = "sha256:8632391c166b5baab71a0ba448d6294cc2768487232bff2b645b62524443a7e7"},
+    {file = "datasette-0.64.tar.gz", hash = "sha256:6a972f9a86e44dab50e4a98fcbbdbd4c5d90e7e5327d9f8205ed7aebe155105d"},
 ]
 
 [package.dependencies]
@@ -755,4 +755,4 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "11658777ee3c1efc3a6e4d2e8837bdf81973c7009d2a707eac8af6a2bf930c3c"
+content-hash = "3f0945c149259cc5dd983dc4175b6abddb56efb88882585c82770e8839b54035"
