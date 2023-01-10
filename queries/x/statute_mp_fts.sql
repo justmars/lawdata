@@ -62,6 +62,28 @@ snippet_data AS (
   WHERE
     sy.id = sx.id
     AND lex_tbl_statute_fts_units_fts match escape_fts(:q)
+),
+snippet_collection AS (
+  SELECT
+    sy1.id,
+    sy1.material_path,
+    snippet(
+      lex_tbl_statute_fts_units_fts,
+      0,
+      '<mark>',
+      '</mark>',
+      '...',
+      15
+    ) matched_text
+  FROM
+    lex_tbl_statute_fts_units sy1
+    JOIN lex_tbl_statute_fts_units_fts
+    ON sy1.rowid = lex_tbl_statute_fts_units_fts.rowid
+  WHERE
+    lex_tbl_statute_fts_units_fts match escape_fts(:q)
+    AND sy1.statute_id = s.id
+  LIMIT
+    -1 offset 0
 )
 SELECT
   s.id,
@@ -74,6 +96,21 @@ SELECT
     FROM
       snippet_data
   ) snippet,
+  (
+    SELECT
+      json_group_array(
+        json_object(
+          'id',
+          id,
+          'material_path',
+          material_path,
+          'snippet',
+          matched_text
+        )
+      )
+    FROM
+      snippet_collection
+  ) snippets,
   (
     SELECT
       max_count
