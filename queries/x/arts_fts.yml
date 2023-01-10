@@ -1,0 +1,9 @@
+title: Full text search articles
+description: |
+  Creates endpoint `/x/arts_fts.json?`
+  Produces rows ordered by date of the article
+hide_sql: true
+params:
+- q
+- start
+- end
