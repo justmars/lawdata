@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "corpus-datasette"
+name = "lawdata"
 version = "0.0.1"
 description = "Datasette instance of corpus-x database."
 authors = ["Marcelino G. Veloso III <mars@veloso.one>"]

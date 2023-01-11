@@ -34,7 +34,7 @@ COPY --from=build /usr/local/bin /usr/local/bin
 COPY --from=build /usr/local/bin/litestream /usr/local/bin/litestream
 ENV LD_LIBRARY_PATH=/usr/local/lib
 
-# we use '/data' because this is the volume that we specifically created for the fly instance of corpus_x_data
+# we use '/data' because this is the volume that we specifically created for the fly instance of lawdata
 # see fly.toml; we use 'x.db' so that the datasette instance can be accessed using https://corpus-x.fly.dev/x (the last x refers to x.db)
 ENV DB_FILE=/data/x.db
 

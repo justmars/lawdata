@@ -11,50 +11,79 @@ fly agent restart
 
 ## app creation
 
-Check existing names then create the fly app with a unique name, we'll use as the database name _corpus-x_ because the database is built with [corpus-x](https://github.com/justmars/corpus-x).
+Check existing names then create the fly app with a unique name, we'll use as `lawdata`.
 
 ```sh
-fly apps list
-fly apps create corpus-x # see app name
+fly apps create lawdata
 ```
 
 ## volume creation
 
-After creating the app, can create a volume that will be used by the app for persistent storage. We'll use the _corpus_x_data_ as the volume name, allocating 3GB as the volume size with:
+After creating the app, create a volume that will be used by the app for persistent storage.
+
+Note that the app is separate from the volume.
+
+We'll use the `db_lawdata` as the volume name, allocating 3GB as the volume size in the Singapore region with:
 
 ```sh
-fly volumes create corpus_x_data --region sin --size 3
-fly volumes list
+fly vol create db_lawdata --region sin --size 3
+fly vol list
 ```
+
+Review `fly.toml`:
+
+1. `source` _db_lawdata_ is created via `fly vol create db_lawdata`;
+2. the `destination` _/data_ is prospective location of sqlite db; this is a folder of the volume
+that is described by the Dockerfile:
+
+```toml
+# fly.toml
+[mounts]
+source = "db_lawdata"
+destination = "/data"
+```
+
+See the associated Dockerfile:
+
+```Dockerfile
+# Dockerfile
+ENV DB_FILE=/data/x.db
+```
+
+After the app is deployed, can ascertain the folder via
+
+```sh
+fly ssh console
+# cd data
+# ls
+```
+
+The database file referred to is built with [corpus-x](https://github.com/justmars/corpus-x).
 
 ## setup config
 
 Review [fly.toml](../fly.toml), specifically `app_name`, `mount.source`, and `services.internal_port`
 
 ```toml
-app = "corpus-x" # this was the name set during creation of the app
+app = "lawdata" # this was the name set during creation of the app
 [env]
 FLY_PRIMARY_REGION = "sin" # this is the region set during creation of the app's volume
 [mounts]
-source = "corpus_x_data" # this was the name set during creation of the app's volume; can verify this with fly volumes list
+source = "db_lawdata" # this was the name set during creation of the app's volume; can verify this with fly volumes list
 destination = "/data" # this is the folder to be created in the app for persistent storage, used in the Dockerfile
 [[services]]
 internal_port = 8080 # will be used in the Dockerfile
 ```
 
-## add certificate to production url
-
-When the app is first created, the following URL will be usable: `corpus-x.fly.dev`
-
-After a certificate is issued, this can become `lawdata.xyz`.
-
-## set environment vars
+## add secrets
 
 Set the environment variables of the app:
 
 ```sh
-fly --app corpus-x secrets import < .env
+fly --app lawdata secrets import < .env
 ```
+
+## set environment vars
 
 See [example .env file](./../.env.example) which outlines 5 variables that serve the following purposes
 
@@ -110,6 +139,19 @@ image size: 323 MB
 --> You can detach the terminal anytime without stopping the deployment
 ```
 
+## add certificate to production url
+
+When the app is first created, the following URL will be usable: `lawdata.fly.dev`
+
+After a certificate is issued, this can become `lawdata.xyz`.
+
+```sh
+fly ips list
+fly certs create lawdata.xyz
+```
+
+Visit the fly.io dashboard and copy the `AAAA` value for `lawdata.fly.dev` to the domain's DNS settings.
+
 ## test access on deployed app
 
 ### unauthorized
@@ -117,7 +159,7 @@ image size: 323 MB
 Without token:
 
 ```sh
-curl -IX get https://corpus-x.fly.dev/x
+curl -IX get https://lawdata.fly.dev/x
 ```
 
 Produces a **HTTP/2 403** (_FORBIDDEN_) http status code:
@@ -133,7 +175,7 @@ fly-request-id: x x x-sin
 
 ### authorized
 
-With the url set at: `corpus-x.fly.dev`, the database file at `x.db`, and the secret previously set for `LAWSQL_BOT_TOKEN`, can test a json list of tables with:
+With the url set at: `lawdata.fly.dev`, the database file at `x.db`, and the secret previously set for `LAWSQL_BOT_TOKEN`, can test a json list of tables with:
 
 ```sh
 export token=<whatever-value-of-LAWSQL_BOT_TOKEN>
