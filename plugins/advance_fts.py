@@ -49,9 +49,6 @@ def fts_query(query: str):
     return " ".join(tokens)
 
 
-
 @hookimpl
 def prepare_connection(conn):
-    conn.create_function(
-        "advance_fts", 1, fts_query
-    )
+    conn.create_function("advance_fts", 1, fts_query)

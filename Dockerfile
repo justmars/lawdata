@@ -40,6 +40,7 @@ ENV DB_FILE=/data/x.db
 
 # the metadata.yml contains a reference to the value that will be respected by datasette-auth-token
 ENV METADATA_PATH=/etc/metadata.yml
+ENV PLUGINS_DIR=plugins
 
 # litestream will pull the database from the replica url
 ENV REPLICA_URL=s3://corpus-x/db

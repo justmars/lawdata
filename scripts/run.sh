@@ -18,4 +18,5 @@ datasette serve \
   --setting default_cache_ttl 86400 \
   --setting sql_time_limit_ms 20000 \
   --setting allow_download off \
+  --plugins-dir="${PLUGINS_DIR}" \
   --cors
