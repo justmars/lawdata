@@ -4,8 +4,9 @@ set -e
 # Restore the database if it does not already exist.
 if [ -f "${DB_FILE}" ]; then
 	echo "Database already exists; removing."
-    rm "${DB_FILE}"
+  rm "${DB_FILE}"
 fi
+
 echo "Restoring database from replica, if it exists"
 litestream restore -v -if-replica-exists -o "${DB_FILE}" "${REPLICA_URL}"
 
