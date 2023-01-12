@@ -57,8 +57,12 @@ COPY queries/x /queries/x
 # copy Datasette metadata file
 COPY etc/metadata.yml $METADATA_PATH
 
+# copy Plugins folder
+COPY plugins $PLUGINS_DIR
+
 # run.sh executes litestream pull from replica url () and then runs the datasette instance
 ARG RUNFILE=/scripts/run.sh
 COPY scripts/run.sh $RUNFILE
+
 RUN chmod 777 $RUNFILE
 CMD [ "/scripts/run.sh" ]
