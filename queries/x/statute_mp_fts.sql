@@ -45,24 +45,6 @@ rowids_match_range AS (
       :end AS INTEGER
     )
 ),
-snippet_data AS (
-  SELECT
-    snippet(
-      lex_tbl_statute_fts_units_fts,
-      0,
-      '<mark>',
-      '</mark>',
-      '...',
-      15
-    ) matched_text
-  FROM
-    lex_tbl_statute_fts_units sy
-    JOIN lex_tbl_statute_fts_units_fts
-    ON sy.rowid = lex_tbl_statute_fts_units_fts.rowid
-  WHERE
-    sy.id = sx.id
-    AND lex_tbl_statute_fts_units_fts match escape_fts(:q)
-),
 snippet_collection AS (
   SELECT
     sy1.id,
@@ -90,12 +72,6 @@ SELECT
   s.date,
   s.title,
   s.description,
-  (
-    SELECT
-      matched_text
-    FROM
-      snippet_data
-  ) snippet,
   (
     SELECT
       json_group_array(

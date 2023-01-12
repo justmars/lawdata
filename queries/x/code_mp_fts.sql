@@ -45,24 +45,6 @@ rowids_match_range AS (
       :end AS INTEGER
     )
 ),
-snippet_data AS (
-  SELECT
-    snippet(
-      lex_tbl_codification_fts_units_fts,
-      0,
-      '<mark>',
-      '</mark>',
-      '...',
-      15
-    ) matched_text
-  FROM
-    lex_tbl_codification_fts_units cy
-    JOIN lex_tbl_codification_fts_units_fts
-    ON cy.rowid = lex_tbl_codification_fts_units_fts.rowid
-  WHERE
-    cy.id = cx.id
-    AND lex_tbl_codification_fts_units_fts match escape_fts(:q)
-),
 snippet_collection AS (
   SELECT
     cy1.id,
@@ -90,12 +72,6 @@ SELECT
   coded.date,
   coded.title,
   coded.description,
-  (
-    SELECT
-      matched_text
-    FROM
-      snippet_data
-  ) snippet,
   (
     SELECT
       json_group_array(
