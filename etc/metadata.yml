@@ -41,6 +41,10 @@ databases:
         title: Opinions
         description: Opinions included in Decisions
         size: 10
+      sc_tbl_segments:
+        title: Segments
+        description: Sements included in Opinions and Decisions
+        size: 10
       sc_tbl_tags:
         title: Title Tags
         description: Preliminary tags categorizing Decisions
