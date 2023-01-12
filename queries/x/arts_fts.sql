@@ -20,7 +20,7 @@ WITH rowids_match_q AS (
     JOIN pax_tbl_articles_fts
     ON arts.rowid = pax_tbl_articles_fts.rowid
   WHERE
-    pax_tbl_articles_fts match escape_fts(:q)
+    pax_tbl_articles_fts match advance_fts(:q)
 ),
 rowids_match_range AS (
   -- layer 2: limit row ids from layer 1 with pagination 'start' and 'end'
@@ -56,7 +56,7 @@ snippet_data AS (
     ON art1.rowid = pax_tbl_articles_fts.rowid
   WHERE
     art1.id = ax.id
-    AND pax_tbl_articles_fts match escape_fts(:q)
+    AND pax_tbl_articles_fts match advance_fts(:q)
 ) -- final layer 4: itemize each relevant field
 SELECT
   ax.id,

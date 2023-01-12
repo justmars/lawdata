@@ -23,7 +23,7 @@ WITH rowids_match_q AS (
     JOIN lex_tbl_codification_fts_units_fts
     ON c1.rowid = lex_tbl_codification_fts_units_fts.rowid
   WHERE
-    lex_tbl_codification_fts_units_fts match escape_fts(:q)
+    lex_tbl_codification_fts_units_fts match advance_fts(:q)
   GROUP BY
     c0.id -- each row will be a unique statute id and thus enable 'mention_count'
   ORDER BY
@@ -62,7 +62,7 @@ snippet_collection AS (
     JOIN lex_tbl_codification_fts_units_fts
     ON cy1.rowid = lex_tbl_codification_fts_units_fts.rowid
   WHERE
-    lex_tbl_codification_fts_units_fts match escape_fts(:q)
+    lex_tbl_codification_fts_units_fts match advance_fts(:q)
     AND cy1.codification_id = coded.id
   LIMIT
     -1 offset 0

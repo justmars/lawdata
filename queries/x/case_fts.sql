@@ -27,7 +27,7 @@ WITH rowids_match_q AS (
     JOIN sc_tbl_segments_fts
     ON seg.rowid = sc_tbl_segments_fts.rowid
   WHERE
-    sc_tbl_segments_fts match escape_fts(:q)
+    sc_tbl_segments_fts match advance_fts(:q)
   GROUP BY
     sc.id
   ORDER BY
@@ -66,7 +66,7 @@ snippet_collection AS (
     JOIN sc_tbl_segments_fts
     ON seg1.rowid = sc_tbl_segments_fts.rowid
   WHERE
-    sc_tbl_segments_fts match escape_fts(:q)
+    sc_tbl_segments_fts match advance_fts(:q)
     AND seg1.decision_id = s.id
   LIMIT
     -1 offset 0
