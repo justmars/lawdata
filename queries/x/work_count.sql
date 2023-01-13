@@ -32,7 +32,7 @@ case_count AS (
   SELECT
     COUNT(sc_tbl_decisions_id) num
   FROM
-    pax_tbl_individuals_sc_tbl_decisions
+    sc_tbl_decisions_pax_tbl_individuals
   WHERE
     pax_tbl_individuals_id = mem.id
   GROUP BY

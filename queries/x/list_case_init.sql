@@ -32,7 +32,7 @@ author_ids AS (
   SELECT
     pax_tbl_individuals_id ids
   FROM
-    pax_tbl_individuals_sc_tbl_decisions
+    sc_tbl_decisions_pax_tbl_individuals
   WHERE
     sc_tbl_decisions_id = caso.id
 )
