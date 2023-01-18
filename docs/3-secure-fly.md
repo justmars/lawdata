@@ -23,10 +23,18 @@ After creating the app, create a volume that will be used by the app for persist
 
 Note that the app is separate from the volume.
 
-We'll use the `db_lawdata` as the volume name, allocating 4GB as the volume size in the Singapore region with:
+In case it already exists, it might be necessary to destroy the volume first and recreate it in case it has no more space.
 
 ```sh
-fly vol create db_lawdata --region sin --size 4
+fly vol list
+# will display list of vol ids
+fly vol destroy <instance-id>
+```
+
+We'll use the `db_lawdata` as the volume name to create, allocating 5GB as the volume size in the Singapore region with:
+
+```sh
+fly vol create db_lawdata --region sin --size 5
 fly vol list
 ```
 

@@ -18,7 +18,9 @@ plugins:
 databases:
   x:
     allow:
-      gh_login: justmars # allowed actor with datasette-auth-github
+      gh_login:
+      - justmars # allowed actor with datasette-auth-github
+      - oragorn
       bot_id: "lex-bot" # allowed actor to access x.db if token included in request with datasette-auth-tokens
     tables:
       _litestream_lock:
