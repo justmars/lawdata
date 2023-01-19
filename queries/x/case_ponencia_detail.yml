@@ -1,0 +1,7 @@
+title: Ponencia Detail
+description: |
+  Creates endpoint `/x/case_ponencia_detail.json?`
+  Produces the relevant content for each ponencia
+hide_sql: true
+params:
+- case_id
