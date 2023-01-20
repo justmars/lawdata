@@ -1,5 +1,5 @@
 SELECT
-  tbl.units -> t.path -> 'history' -- extract the path of the json tree, then extract the history component of that path
+  tbl.units -> t.path -> 'history' history -- extract the path of the json tree, then extract the history component of that path
 FROM
   lex_tbl_codifications tbl,
   json_tree(
