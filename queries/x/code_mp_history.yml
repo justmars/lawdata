@@ -1,6 +1,6 @@
 title: History - code material path
 description: |
-  Creates endpoint `/x/code_mp_history.json?`, requires `_shape=array`.
+  Creates endpoint `/x/code_mp_history.json?`
 
   Produces rows consisting of the historical events of a
   given codification with id `code_id` at material path `mp`

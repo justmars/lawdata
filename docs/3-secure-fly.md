@@ -29,12 +29,14 @@ In case it already exists, it might be necessary to destroy the volume first and
 fly vol list
 # will display list of vol ids
 fly vol destroy <instance-id>
+# ? Are you sure you want to destroy this volume? Yes
+# Destroyed volume xxx from lawdata -- recall lawdata is the app name
 ```
 
-We'll use the `db_lawdata` as the volume name to create, allocating 5GB as the volume size in the Singapore region with:
+We'll use the `db_lawdata` as the volume name to create, allocating 7GB as the volume size in the Singapore region with:
 
 ```sh
-fly vol create db_lawdata --region sin --size 5
+fly vol create db_lawdata --region sin --size 7
 fly vol list
 ```
 

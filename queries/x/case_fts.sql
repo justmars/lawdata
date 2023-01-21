@@ -22,12 +22,12 @@ WITH rowids_match_q AS (
     ) mention_count -- total number of times that phrase `q` appears in segments of the decision
   FROM
     sc_tbl_decisions sc
-    JOIN lex_tbl_opinion_segments seg
+    JOIN sc_tbl_segments seg
     ON seg.decision_id = sc.id
-    JOIN lex_tbl_opinion_segments_fts
-    ON seg.rowid = lex_tbl_opinion_segments_fts.rowid
+    JOIN sc_tbl_segments_fts
+    ON seg.rowid = sc_tbl_segments_fts.rowid
   WHERE
-    lex_tbl_opinion_segments_fts match advance_fts(:q)
+    sc_tbl_segments_fts match advance_fts(:q)
   GROUP BY
     sc.id
   ORDER BY
@@ -54,7 +54,7 @@ snippet_collection AS (
     seg1.id,
     seg1.opinion_id,
     snippet(
-      lex_tbl_opinion_segments_fts,
+      sc_tbl_segments_fts,
       0,
       '<mark>',
       '</mark>',
@@ -62,11 +62,11 @@ snippet_collection AS (
       15
     ) matched_text
   FROM
-    lex_tbl_opinion_segments seg1
-    JOIN lex_tbl_opinion_segments_fts
-    ON seg1.rowid = lex_tbl_opinion_segments_fts.rowid
+    sc_tbl_segments seg1
+    JOIN sc_tbl_segments_fts
+    ON seg1.rowid = sc_tbl_segments_fts.rowid
   WHERE
-    lex_tbl_opinion_segments_fts match advance_fts(:q)
+    sc_tbl_segments_fts match advance_fts(:q)
     AND seg1.decision_id = s.id
   LIMIT
     -1 offset 0

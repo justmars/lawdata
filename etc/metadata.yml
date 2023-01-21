@@ -41,11 +41,11 @@ databases:
         size: 15
       sc_tbl_opinions:
         title: Opinions
-        description: Opinions included in Decisions
+        description: Each Decision may be subdivided into Opinions
         size: 10
       sc_tbl_segments:
         title: Segments
-        description: Sements included in Opinions and Decisions
+        description: Each Opinion may be split into fragments which we'll call Segments
         size: 10
       sc_tbl_tags:
         title: Title Tags
@@ -58,16 +58,42 @@ databases:
       lex_tbl_statutes:
         title: Statutes
         description: Structured, serialized content from rule-making authorities
-        size: 1
+        size: 1 # needs to be set at 1 since the units column can become unwieldly
         columns:
           statute_category: e.g. ra (republic act), ca (commonwealth act), etc.
           statute_serial_id: e.g. 386, 141, etc.
           date: The date that statute is published / promulgated
           variant: Ordinarily, the combination of category, serial, and date would establish uniqueness. In exceptional cases, a variant is necessary.
+      lex_tbl_opinion_citations:
+        title: Citations In Opinions
+        description: The full text of each opinion is scanned for Citations that reference Decisions
+        size: 10
+        columns:
+          id: Identifying the row of the table
+          opinion_id: Representing opinion where we can collect 'docket', 'scra', 'phil', and 'offg' citations
+          docket: Of the format 'docket_category' + 'docket_serial' + 'docket_date'
+          docket_category: Part of the docket, can be either GR, AM, AM, BM
+          docket_serial: Part of the docket
+          docket_date: Part of the docket
+          phil: Of the format - X Phil. Y representing the Philippine Reports
+          scra: Of the format - X SCRA Y representing the Supreme Court Reports Annotated
+          offg: Of the format - X Offg. Y representing the Official Gazette
+          included_decision_id: The citation consisting of the 'docket', 'scra', 'phil', and 'offg' can be mapped to a Decision
+      lex_tbl_opinion_statutes:
+        title: Statutes In Opinions
+        description: The full text of each opinion is scanned for Statutes
+        size: 10
+        columns:
+          id: Identifying the row of the table
+          opinion_id: Representing opinion where we can collect 'statute_category', 'statute_serial_id' fields
+          statute_category: e.g. ra, ca, const, etc.
+          statute_serial_id: An essential pairing of 'statute_category'
+          included_statute_id: The first matching Statute represented by the 'statute_category' and 'statute_serial_id' pair
+          mentions: The number of times the Statute represented by 'statute_category' and 'statute_serial_id' appears in the Opinion
       lex_tbl_codifications:
         title: Codifications
         description: Annotated statutes with events from both Statutes and Decisions
-        size: 1
+        size: 1 # needs to be set at 1 since the units column can become unwieldly
         columns:
           statute_id: The statute id that has been codified
           date: The date that codification is published; this is different from the date of the base statute id
