@@ -1,6 +1,6 @@
-# deploy remotely to fly.io
+# Production
 
-## initialization
+## Initialization
 
 Debug:
 
@@ -9,7 +9,7 @@ fly doctor
 fly agent restart
 ```
 
-## app creation
+## App creation
 
 Check existing names then create the fly app with a unique name, we'll use as `lawdata`.
 
@@ -17,7 +17,7 @@ Check existing names then create the fly app with a unique name, we'll use as `l
 fly apps create lawdata
 ```
 
-## volume creation
+## Volume creation
 
 After creating the app, create a volume that will be used by the app for persistent storage.
 
@@ -70,9 +70,9 @@ fly ssh console
 
 The database file referred to is built with [corpus-x](https://github.com/justmars/corpus-x).
 
-## setup config
+## Setup config
 
-Review [fly.toml](../fly.toml), specifically `app_name`, `mount.source`, and `services.internal_port`
+Review root `fly.toml`, specifically `app_name`, `mount.source`, and `services.internal_port`
 
 ```toml
 app = "lawdata" # this was the name set during creation of the app
@@ -85,7 +85,7 @@ destination = "/data" # this is the folder to be created in the app for persiste
 internal_port = 8080 # will be used in the Dockerfile
 ```
 
-## add secrets
+## Add secrets
 
 Set the environment variables of the app:
 
@@ -93,14 +93,14 @@ Set the environment variables of the app:
 fly --app lawdata secrets import < .env
 ```
 
-## set environment vars
+## Set environment vars
 
-See [example .env file](./../.env.example) which outlines 5 variables that serve the following purposes
+See `.env.example` which outlines 5 variables that serve the following purposes
 
 vars | purpose
 :--:|:--:
 `LITESTREAM_ACCESS_KEY_ID` & `LITESTREAM_SECRET_ACCESS_KEY` | aws credentials for _litestream.io_ to [restore a replica](/scripts/run.sh) of previously saved & replicated database to the volume created
- `LAWSQL_BOT_TOKEN` | Bearer Token, a user-made credential for datasette (see [datasette-auth-tokens plugin](https://github.com/simonw/datasette-auth-tokens)), to query the database; see allow list in [metadata](.././etc/metadata.yml)
+ `LAWSQL_BOT_TOKEN` | Bearer Token, a user-made credential for datasette (see [datasette-auth-tokens plugin](https://github.com/simonw/datasette-auth-tokens)), to query the database; see allow list in `metadata.yml`
 `DATASETTE_GITHUB_AUTH_CLIENT_ID` & `DATASETTE_GITHUB_AUTH_CLIENT_SECRET` | github credentials, see ([datasette-auth-github plugin](https://github.com/simonw/datasette-auth-github)), to login and access datasette via the production url, set the callback url in `Github's / Developer Settings /` [oAuth Apps](https://github.com/settings/developers)
 
 ## build local image then deploy to fly
@@ -149,7 +149,7 @@ image size: 323 MB
 --> You can detach the terminal anytime without stopping the deployment
 ```
 
-## add certificate to production url
+## Add certificate to production url
 
 When the app is first created, the following URL will be usable: `lawdata.fly.dev`
 
@@ -162,9 +162,9 @@ fly certs create lawdata.xyz
 
 Visit the fly.io dashboard and copy the `AAAA` value for `lawdata.fly.dev` to the domain's DNS settings.
 
-## test access on deployed app
+## Test access on deployed app
 
-### unauthorized
+### Unauthorized
 
 Without token:
 
@@ -183,7 +183,7 @@ via: 2 fly.io
 fly-request-id: x x x-sin
 ```
 
-### authorized
+### Authorized
 
 With the url set at: `lawdata.fly.dev`, the database file at `x.db`, and the secret previously set for `LAWSQL_BOT_TOKEN`, can test a json list of tables with:
 

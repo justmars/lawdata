@@ -1,27 +1,26 @@
+# Docker
 
-# secured local image
+A restored database can be accessed in a localhost container through a `datasette` instance via an authorization bearer token `LAWSQL_BOT_TOKEN`.
 
-With `litestream` installed, a _previously replicated_ [db.sqlite](https://github.com/justmars/corpus-x) from AWS (with credentials `LITESTREAM_ACCESS_KEY_ID` and `LITESTREAM_SECRET_ACCESS_KEY`) can be **restored** via `docker run ...`. This restored database can be accessed through a `datasette` instance via an authorization bearer token `LAWSQL_BOT_TOKEN`.
+## Assumptions
 
-## setup requirements.txt
+1. A sqlite database is generated via [corpus-x](https://github.com/justmars/corpus-x) and replicated to aws.
+2. Credentials `LITESTREAM_ACCESS_KEY_ID` and `LITESTREAM_SECRET_ACCESS_KEY` are available to access aws.
+3. `litestream` is installed to transfer the database to the docker container.
+4. [Docker for Mac](https://docs.docker.com/desktop/install/mac-install/) is installed, updated, and running.
+5. valid Dockerfile in root directory and the proper versions of the prerequisite apps are configured:
+    1. `python`, 3.11
+    2. `litestream`, 0.39
+    3. `sqlite` 3.40
+6. An updated `requirements.txt` file is generated that will be used by the Dockerfile
+
+## Setup requirements.txt
 
 ```sh
 poetry export -f requirements.txt --output requirements.txt --without-hashes
 ```
 
-## pre-requisite docker
-
-Ensure [Docker for Mac](https://docs.docker.com/desktop/install/mac-install/) is installed, updated, and running.
-
-## review dockerfile
-
-Ensure existence of a valid Dockerfile in root directory and applicable versions of:
-
-1. `python`, 3.11
-2. `litestream`, 0.39
-3. `sqlite` 3.40
-
-## dockerfile to docker image
+## Dockerfile to docker image
 
 Can create the docker image with:
 
@@ -31,7 +30,7 @@ docker build -t lawdata-local . # Will look for Dockerfile inside the . folder
 
 This will start the build process. If successful, the docker image will be built and appear in the list of Docker Images found in VS Code's Docker extension.
 
-## run docker image
+## Run docker image
 
 Run the docker image locally with:
 
@@ -47,9 +46,9 @@ docker run \
   lawdata-local
 ```
 
-## restore via run.sh
+## Restore via run.sh
 
-The [Dockerfile](../Dockerfile) terminates with [run.sh](./scripts/run.sh).
+The [Dockerfile](../Dockerfile) terminates with `run.sh`.
 
 Since, on initialization, the sqlite database file doesn't exist yet, it will use litestream's `restore` command to copy the AWS variant to a local container.
 
@@ -66,9 +65,9 @@ INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
 ```
 
-## test access on a running container
+## Test access on a running container
 
-### unauthorized
+Unauthorized:
 
 ```sh
 curl -IX get localhost:8080/x.json
@@ -84,7 +83,7 @@ content-type: text/html; charset=utf-8
 Transfer-Encoding: chunked
 ```
 
-### authorized
+Authorized:
 
 With xxx as `LAWSQL_BOT_TOKEN`, this results in a list of tables from restored the `x.db` via datasette + litestream:
 

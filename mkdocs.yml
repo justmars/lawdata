@@ -1,0 +1,52 @@
+site_name: LawData Docs
+site_description: Query lawsql.com data via authenticated API calls
+site_url: https://lawsql.com
+site_author: Marcelino Veloso III
+repo_url: https://github.com/justmars/lawdata
+theme:
+  name: "material"
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: pink
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+nav:
+  - index.md
+  - Use:
+    - Local Dev: use/dev.md
+    - Local Docker: use/docker.md
+    - Production Fly: use/production.md
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/justmars
+      name: justmars on Github
+copyright: Copyright &copy; Marcelino Veloso III
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_toc_entry: false
+            show_category_heading: true
+            show_source: true
+            heading_level: 3
+  - search:
+      lang: en
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      auto_title: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
