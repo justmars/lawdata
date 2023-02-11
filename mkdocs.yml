@@ -20,6 +20,7 @@ theme:
         name: Switch to light mode
 nav:
   - index.md
+  - docker.md
   - Use:
     - Local Dev: use/dev.md
     - Local Docker: use/docker.md
