@@ -3,13 +3,16 @@ description: Authenticated access to the main database.
 source: Philippine Supreme Court
 plugins:
   datasette-query-files:
-    query_directory: sc/queries # undocumented, but see https://github.com/eyeseast/datasette-query-files/blob/main/datasette_query_files/__init__.py
+    # undocumented, but see https://github.com/eyeseast/datasette-query-files/blob/main/datasette_query_files/__init__.py
+    query_directory: app/queries
   datasette-auth-tokens:
-    tokens: # note this is a list; each token is a combination of two keys
+    # note this is a list; each token is a combination of two keys
+    tokens:
       - token:
           $env: LAWSQL_BOT_TOKEN
         actor:
-          bot_id: "lex-bot" # allowed actor trying to access the datasette
+          # allowed actor trying to access the datasette
+          bot_id: "lex-bot"
   datasette-auth-github:
     client_id:
       $env: DATASETTE_GITHUB_AUTH_CLIENT_ID

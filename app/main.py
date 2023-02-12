@@ -1,8 +1,7 @@
-import click
-
-from pylts import ConfigS3
 from pathlib import Path
 
+import click
+from pylts import ConfigS3
 
 x = ConfigS3(
     s3="s3://corpus-x/db",

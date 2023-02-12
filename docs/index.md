@@ -1,87 +1,96 @@
-# lawdata Docs
+# Overview
 
-Access and deploy a Datasette instance using litestream and docker. See [lawdata](https://lawdata.xyz).
+[lawData](https://lawdata.xyz) is an authenticated datasette (`0.64.1`) instance on fly.io deployed via litestream and docker, covering databases created from `/corpus-pdf` and `/corpus-x` (non-pdf files).
 
-## Config
+## Flow
 
-### datasette-query-files
-
-Unlike a default Datasette instance, canned SQL queries will _not_ be found in `etc/metadata.yml`.
-
-The `datasette-query-files` [plugin](https://github.com/eyeseast/datasette-query-files) allows us to use a separate folder `/queries/` where each pairing of `.sql` and `.yml` becomes its own canned API endpoint.
-
-### Native .sql files
-
-This setup makes it easier to write .sql files in VSCode with extensions ([dbt formatter](https://github.com/henriblancke/vscode-dbt-formatter) dependent on [vscode-dbt](https://github.com/bastienboutonnet/vscode-dbt.git)):
-
-```json
-// settings.json
-"files.associations": {
-  "**/*.sql": "jinja-sql",
-}
+```mermaid
+---
+title: 2 databases in AWS restorable to fly.io
+---
+flowchart TD
+  subgraph fly.io
+    app
+    volume
+  end
+  subgraph lawdata
+    datasette
+    db1
+    db2
+    datasette-->app
+    Dockerfile-->fly.io
+    db1-->volume
+    db2-->volume
+  end
+  subgraph aws
+    s3-x(s3://corpus-x/db)--"restored via litestream"-->db1
+    s3-pdf(s3://corpus-pdf/db)--"restored via litestream"-->db2
+  end
+  subgraph /corpus-x
+    corpus-x-db.sqlite--"replicated via litestream manually"-->s3-x
+  end
+  subgraph /corpus-pdf
+    corpus-pdf-db.sqlite--"replicated via litestream via github cron schedule"-->s3-pdf
+  end
 ```
 
-### Relatively Complex SQL
+## Folder Structure
 
-The sqlite expressions are complex, making use of [JSON1](https://www.sqlite.org/json1.html) and [FTS5](https://www.sqlite.org/fts5.html) extensions.
+```sh
+├── app
+│   ├── queries # see metadata.yml referencing app/queries in relation to datasette-query-files
+│   │   ├── x # for x-based .sql queries
+│   │   ├── pdf # for pdf-based .sql queries
+│   ├── plugins
+│   ├── scripts
+│   │   ├── run.sh # called via Dockerfile CMD
+│   ├── metadata.yml
+│   ├── requirements.txt
+│   ├── main.py # contains the commands implemented in run.sh
+├── data # see main.py in tandem with fly.toml which will look for / place .db files here
+├── Dockerfile
 
-#### Start and End Rows, precursor to FTS5 snippet
-
-Most of the queries utilize the following common table expression style:
-
-```sql
-SELECT
-  ROW_NUMBER() over (ORDER BY cx.id) rn,
-  cx.id row_idx,
-  COUNT(*) over () max_count
-FROM
-  lex_tbl_codification_fts_units cx
-  JOIN lex_tbl_codification_fts_units_fts
-  ON cx.rowid = lex_tbl_codification_fts_units_fts.rowid
-WHERE
-  cx.codification_id = :code_id
-  AND lex_tbl_codification_fts_units_fts match escape_fts(:q) -- escape_fts is a datasette-defined user function
+# while in the root folder, ensure that requirements.txt inside `app/` is updated via:
+poetry export -f requirements.txt -o app/requirements.txt --without-hashes
 ```
 
-This is an example of fetching the applicable rows for a given `code_id` with a matching full-text-search (fts) done on the `lex_tbl_codification_fts_units` table.
+## Main Functions
 
-It creates rows with the following fields under a designated order:
+The Dockerfile does **not** change directories via `WORKDIR` so
+paths are clear, especially in `run.sh`:
 
-1. row numbers `rn` for each matching row
-2. paired unique id `row_idx` corresponding to the `rn`
-3. total number of rows `max_count`
-
-Using this first CTE as the baseline, a second CTE will be used to filter the first CTE based on a `start_row` and an `end_row`
-
-```sql
-SELECT
-  rn, row_idx, max_count
-FROM
-  rowids_match_q
-WHERE
-  rn BETWEEN CAST(:start AS INTEGER)
-  AND CAST(:end AS INTEGER)
+```sh
+python -m app x-restore-db # creates a new /data/x.db
+python -m app pdf-restore-db # creates a new /data/pdf.db
+datasette serve --immutable data/pdf.db data/x.db \ # see data folder
+  --host 0.0.0.0 \
+  --port 8080 \ # same port in Dockerfile
+  --metadata app/metadata.yml \ # see app folder
+  --plugins-dir app/plugins \ # see app folder
+  --setting default_cache_ttl 86400 \
+  --setting sql_time_limit_ms 20000 \
+  --setting allow_download off \
+  --cors
 ```
 
-The reason for these preliminary CTEs is to limit the  rows that sqlite's fts5 [snippet function](https://www.sqlite.org/fts5.html#the_snippet_function) will be called to operate on; if the snippet function were called in the first CTE, then all of the matching rows would have a computed value vs. the ranged rows limited by the `start` and `end` parameters.
+## Assumptions
 
-```sql
-SELECT
-  snippet(
-    lex_tbl_codification_fts_units_fts,
-    0,
-    '<mark>',
-    '</mark>',
-    '...',
-    15
-  ) matched_text
-FROM
-  lex_tbl_codification_fts_units cx3
-  JOIN lex_tbl_codification_fts_units_fts
-  ON lex_tbl_codification_fts_units_fts.rowid = cx3.rowid
-WHERE
-  cx3.id = cx2.id -- cx2 is declared in the main SQL statement and will be based on the prefiltered rows
-  AND lex_tbl_codification_fts_units_fts match escape_fts(:q)
+1. sqlite databases are existing in aws s3 buckets.
+2. Credentials `LITESTREAM_ACCESS_KEY_ID` and `LITESTREAM_SECRET_ACCESS_KEY` are available to access aws.
+3. `litestream` is installed to transfer the database/s to the docker container.
+4. [Docker for Mac](https://docs.docker.com/desktop/install/mac-install/) is installed, updated, and running.
+5. valid Dockerfile in root directory and the proper versions of the prerequisite apps are configured:
+    1. `python`, 3.11
+    2. `litestream`, 0.39
+    3. `sqlite` 3.40
+6. An updated `/app/requirements.txt` file is generated that will be used by the Dockerfile
+
+## Litestream
+
+If database cannot be found in the client device:
+
+```sh
+export LITESTREAM_ACCESS_KEY_ID=xxx
+export LITESTREAM_SECRET_ACCESS_KEY=yyy
+litestream restore -if-db-not-exists -o x.db s3://corpus-x/db
 ```
-
-The full SQL expression for this particular example can be found in `/queries/x/code_mp_fts_id.sql`.
