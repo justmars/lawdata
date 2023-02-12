@@ -1,6 +1,21 @@
 # Overview
 
-[lawData](https://lawdata.xyz) is an authenticated datasette (`0.64.1`) instance on fly.io deployed via litestream and docker, covering databases created from `/corpus-pdf` and `/corpus-x` (non-pdf files).
+[lawData](https://lawdata.xyz) is an authenticated datasette (`0.64.1`) instance on fly.io deployed via litestream and docker, covering databases created from `/corpus-extractor` and `/corpus-x`.
+
+repo | dependencies | src | notes
+--:|:--|:--|:--
+_corpus-extractor_ (private) | [corpus-unpdf](https://mv3.dev/corpus-unpdf), _corpus-sitemap_ (private) | [sc](https://sc.judiciary.gov.ph) | pdf files
+[corpus-x](https://mv3.dev/corpus-x) | [corpus-pax](https://mv3.dev/corpus-pax), [corpus-base](https://mv3.dev/corpus-base) | [sc-elib](https://elibrary.judiciary.gov.ph) | converted md / yaml files
+
+## Litestream
+
+If database cannot be found in the client device:
+
+```sh
+export LITESTREAM_ACCESS_KEY_ID=xxx
+export LITESTREAM_SECRET_ACCESS_KEY=yyy
+litestream restore -if-db-not-exists -o x.db s3://corpus-x/db  # will restore x.db sqlite from s3://corpus-x/db using CLI
+```
 
 ## Flow
 
@@ -29,8 +44,8 @@ flowchart TD
   subgraph /corpus-x
     corpus-x-db.sqlite--"replicated via litestream manually"-->s3-x
   end
-  subgraph /corpus-pdf
-    corpus-pdf-db.sqlite--"replicated via litestream via github cron schedule"-->s3-pdf
+  subgraph /corpus-extractor
+    corpus-extractor-db.sqlite--"replicated via litestream via github cron schedule"-->s3-pdf
   end
 ```
 
@@ -54,12 +69,19 @@ flowchart TD
 poetry export -f requirements.txt -o app/requirements.txt --without-hashes
 ```
 
-## Main Functions
+## Docker Entrypoint
 
-The Dockerfile does **not** change directories via `WORKDIR` so
-paths are clear, especially in `run.sh`:
+The Dockerfile does **not** change directories via `WORKDIR`.
+
+This is because of `run.sh` which references 2 top-level directories:
+
+Directory | Description
+--:|:--
+`/app` | Initialized with `fly apps create`
+`/data` | Separate volume created via `fly volumes create` and then attached to the app created via `fly apps create`.
 
 ```sh
+# gist of run.sh
 python -m app x-restore-db # creates a new /data/x.db
 python -m app pdf-restore-db # creates a new /data/pdf.db
 datasette serve --immutable data/pdf.db data/x.db \ # see data folder
@@ -84,13 +106,3 @@ datasette serve --immutable data/pdf.db data/x.db \ # see data folder
     2. `litestream`, 0.39
     3. `sqlite` 3.40
 6. An updated `/app/requirements.txt` file is generated that will be used by the Dockerfile
-
-## Litestream
-
-If database cannot be found in the client device:
-
-```sh
-export LITESTREAM_ACCESS_KEY_ID=xxx
-export LITESTREAM_SECRET_ACCESS_KEY=yyy
-litestream restore -if-db-not-exists -o x.db s3://corpus-x/db
-```
