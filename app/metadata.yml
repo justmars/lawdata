@@ -1,8 +1,9 @@
 title: Law Data
 description: Authenticated access to the main database.
 source: Philippine Supreme Court
-source_url: https://elibrary.judiciary.gov.ph/
 plugins:
+  datasette-query-files:
+    query_directory: sc/queries # undocumented, but see https://github.com/eyeseast/datasette-query-files/blob/main/datasette_query_files/__init__.py
   datasette-auth-tokens:
     tokens: # note this is a list; each token is a combination of two keys
       - token:
@@ -16,12 +17,26 @@ plugins:
       $env: DATASETTE_GITHUB_AUTH_CLIENT_SECRET
     ...: ... # enables access, requires gh_login in allow
 databases:
+  #allow:
+    # gh_login:
+    #- justmars # allowed actor with datasette-auth-github
+    #- oragorn
+    # bot_id: "lex-bot" # allowed actor to access x.db if token included in request with datasette-auth-tokens
+  pdf:
+    title: PDF Files
+    description: Expect unformatted content.
+    source_url: https://sc.judiciary.gov.ph/
+    tables:
+      _litestream_lock:
+        hidden: true
+      _litestream_seq:
+        hidden: true
+      pre_tbl_decisions:
+        title: Decisions from Website
   x:
-    allow:
-      gh_login:
-      - justmars # allowed actor with datasette-auth-github
-      - oragorn
-      bot_id: "lex-bot" # allowed actor to access x.db if token included in request with datasette-auth-tokens
+    title: TXT Files
+    description: Most of the text has been processed even if the formats are inconsistent.
+    source_url: https://elibrary.judiciary.gov.ph/
     tables:
       _litestream_lock:
         hidden: true

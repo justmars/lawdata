@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "lawdata"
-version = "0.0.1"
-description = "Datasette instance of corpus-x database."
+version = "0.0.2"
+description = "Datasette instance of corpus-x / corpus-pdf databases."
 authors = ["Marcelino G. Veloso III <mars@veloso.one>"]
 readme = "README.md"
 license = "MIT"
@@ -23,12 +23,15 @@ datasette-pretty-json = "^0.2.2"
 datasette-auth-tokens = "^0.3"
 datasette-auth-github = "^0.13.1"
 datasette-query-files = "^0.1.1"
+pylts = "^0.0.7"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^2.21"
+black = "^23.1.0"
 mkdocs = "^1.4.2"
 mkdocstrings = { extras = ["python"], version = "^0.20.0" }
 mkdocs-material = "^9.0.6"
+notebook = "^6.5.2"
 
 [tool.black]
 target-version = ['py311']
