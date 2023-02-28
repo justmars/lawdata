@@ -3,8 +3,8 @@ FROM python:3.11.1-slim-bullseye
 ENV PYTHONDONTWRITEBYTECODE=1 \
   PYTHONUNBUFFERED=1
 ARG LITESTREAM_VER=0.3.9 \
-  SQLITE_YEAR=2022 \
-  SQLITE_VER=3400100
+  SQLITE_YEAR=2023 \
+  SQLITE_VER=3410000
 RUN apt update \
   && apt install -y build-essential wget pkg-config git \
   && apt clean
@@ -17,7 +17,6 @@ RUN wget "https://www.sqlite.org/$SQLITE_YEAR/sqlite-autoconf-$SQLITE_VER.tar.gz
   && ./configure --disable-static --enable-fts5 --enable-json1 CFLAGS="-g -O2 -DSQLITE_ENABLE_JSON1" \
   && make && make install \
   && cd .. \
-  && rm -rf sqlite-autoconf-$SQLITE_VER \
   && rm sqlite-autoconf-$SQLITE_VER.tar.gz
 COPY app /app
 RUN pip3 install -U pip && pip3 install -r /app/requirements.txt

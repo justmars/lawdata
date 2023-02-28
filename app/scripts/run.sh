@@ -4,11 +4,8 @@ set -e
 echo "Main SC database:"
 python -m app x-restore-db
 
-echo "Supplemental SC database:"
-python -m app pdf-restore-db
-
 # Run datasette
-datasette serve --immutable data/pdf.db data/x.db \
+datasette serve --immutable data/x.db \
   --host 0.0.0.0 \
   --port 8080 \
   --metadata app/metadata.yml \

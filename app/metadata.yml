@@ -20,23 +20,6 @@ plugins:
       $env: DATASETTE_GITHUB_AUTH_CLIENT_SECRET
     ...: ... # enables access, requires gh_login in allow
 databases:
-  pdf:
-    allow:
-      gh_login:
-      - justmars # allowed actor with datasette-auth-github
-      - oragorn
-      bot_id: "lex-bot" # allowed actor to access x.db if token included in request with datasette-auth-tokens
-    title: PDF Files
-    description: Expect unformatted content.
-    source: Philippine Supreme Court website
-    source_url: https://sc.judiciary.gov.ph/
-    tables:
-      _litestream_lock:
-        hidden: true
-      _litestream_seq:
-        hidden: true
-      pre_tbl_decisions:
-        title: Decisions from Website
   x:
     allow:
       gh_login:
