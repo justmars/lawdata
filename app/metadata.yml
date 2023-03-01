@@ -25,7 +25,7 @@ databases:
       gh_login:
       - justmars # allowed actor with datasette-auth-github
       - oragorn
-    bot_id: "lex-bot" # allowed actor to access x.db if token included in request with datasette-auth-tokens
+      bot_id: "lex-bot" # allowed actor to access x.db if token included in request with datasette-auth-tokens
     title: TXT Files
     description: Most of the text has been processed even if the formats are inconsistent.
     source: Philippine Supreme Court - e-Library
