@@ -1,0 +1,24 @@
+from pathlib import Path
+
+import click
+from pylts import ConfigS3
+
+x = ConfigS3(
+    s3="s3://corpus-x/db",
+    folder=Path(__file__).parent.parent / "data",
+    db="x.db",
+)
+
+
+@click.command()
+def x_restore_db():
+    x.delete()
+    x.restore()
+
+
+@click.group()
+def group():
+    pass
+
+
+group.add_command(x_restore_db)

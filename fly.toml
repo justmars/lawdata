@@ -1,0 +1,28 @@
+app = "lawdata"
+
+[env]
+FLY_PRIMARY_REGION = "sin"
+
+[mounts]
+source = "db_lawdata"
+destination = "/data"
+
+[[services]]
+internal_port = 8080
+protocol = "tcp"
+
+[services.concurrency]
+hard_limit = 25
+soft_limit = 20
+
+[[services.ports]]
+handlers = ["http"]
+port = 80
+
+[[services.ports]]
+handlers = ["tls", "http"]
+port = 443
+
+[[services.tcp_checks]]
+interval = "10000"
+timeout = "5000"

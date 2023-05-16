@@ -1,0 +1,10 @@
+title: Full text search code units within a specified code
+description: |
+  Creates endpoint `/x/code_mp_fts_id.json?`.
+  Full-text searches on codification material paths within a `code_id`
+hide_sql: true
+params:
+- q
+- code_id
+- start
+- end
