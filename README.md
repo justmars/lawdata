@@ -13,7 +13,6 @@ See [documentation](https://justmars.github.io/lawdata).
 Checkout code, create a new virtual environment:
 
 ```sh
-poetry add lawdata # python -m pip install lawdata
-poetry update # install dependencies
+poetry install # install dependencies
 poetry shell
 ```
