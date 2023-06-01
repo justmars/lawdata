@@ -29,7 +29,7 @@ pytest-datadir = "^1.4.1"
 pytest-cov = "^2.12.1"
 pre-commit = "^2.21"
 mkdocs = "^1.4.2"
-mkdocstrings = { extras = ["python"], version = "^0.20.0" }
+mkdocstrings = { extras = ["python"], version = "^0.22.0" }
 mkdocs-material = "^9.1"
 
 [tool.ruff]
