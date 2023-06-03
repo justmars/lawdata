@@ -1,0 +1,7 @@
+.env
+data
+docs
+tests
+justfile
+.editorconfig
+.pre-commit-config.yaml

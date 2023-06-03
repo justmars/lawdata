@@ -90,7 +90,7 @@ internal_port = 8080 # will be used in the Dockerfile
 Set the environment variables of the app:
 
 ```sh
-fly --app lawdata secrets import < .env
+fly --app lawdata secrets import < .env --stage
 ```
 
 ## Set environment vars
@@ -158,9 +158,20 @@ After a certificate is issued, this can become `lawdata.xyz`.
 ```sh
 fly ips list
 fly certs create lawdata.xyz
+fly certs create www.lawdata.xyz
 ```
 
-Visit the fly.io dashboard and copy the `AAAA` value for `lawdata.fly.dev` to the domain's DNS settings.
+Visit the fly.io dashboard and copy the `A` and `AAAA` values. These are also the same values reflected in `fly ips list`.
+
+After running `fly certs create www.lawdata.xyz`, the following prompt is displayed:
+
+```console
+You can configure your DNS for www.lawdata.xyz by:
+
+1: Adding an CNAME record to your DNS service which reads:
+
+    CNAME www. lawdata.fly.dev
+```
 
 ## Test access on deployed app
 
