@@ -26,10 +26,6 @@ databases:
 
 ```sh
 # .env
-export LITESTREAM_ACCESS_KEY_ID=xxx
-export LITESTREAM_SECRET_ACCESS_KEY=yyy
-export LAWSQL_BOT_TOKEN=zzz
-# see command in run.sh
 datasette serve --immutable data/pdf.db data/x.db ...
 ```
 
@@ -46,15 +42,7 @@ This will start the build process. If successful, the docker image will be built
 Run the docker image locally with:
 
 ```sh
-export LITESTREAM_ACCESS_KEY_ID=xxx
-export LITESTREAM_SECRET_ACCESS_KEY=yyy
-export LAWSQL_BOT_TOKEN=zzz
-docker run \
-  -p 8080:8080 \
-  -e LITESTREAM_ACCESS_KEY_ID \
-  -e LITESTREAM_SECRET_ACCESS_KEY \
-  -e LAWSQL_BOT_TOKEN \
-  lawdata
+docker run --publish 8080:8080 --env-file .env lawdata
 ```
 
 ### Restore via run.sh

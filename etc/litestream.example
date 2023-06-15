@@ -1,0 +1,10 @@
+dbs:
+  - path: data/x.db
+    replicas:
+      - type: s3
+        endpoint: op://dev/cloudflare/r2/endpoint
+        path: lawdata/db
+        region: apac
+        bucket: corpus
+        access-key-id: op://dev/cloudflare/r2/access_key_id
+        secret-access-key: op://dev/cloudflare/r2/secret_access_key

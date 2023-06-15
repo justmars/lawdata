@@ -1,0 +1,10 @@
+dbs:
+  - path: $DB_FILE
+    replicas:
+      - type: s3
+        endpoint: $R2_ENDPOINT
+        path: $R2_PATH
+        region: apac
+        bucket: $R2_BUCKET
+        access-key-id: $R2_ACCESS_KEY_ID
+        secret-access-key: $R2_SECRET_ACCESS_KEY

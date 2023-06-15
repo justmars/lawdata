@@ -3,6 +3,7 @@
 .ruff_cache
 *.db
 poetry.lock
+litestream-dev.yaml
 data/
 
 # Byte-compiled / optimized / DLL files

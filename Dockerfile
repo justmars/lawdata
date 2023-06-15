@@ -24,6 +24,7 @@ ENV PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     LD_LIBRARY_PATH=/usr/local/lib
 
+COPY etc/litestream-prod.yaml /etc/litestream-prod.yaml
 COPY app /app
 RUN pip3 install -U pip && pip3 install -r /app/requirements.txt && chmod +x /app/scripts/run.sh
 EXPOSE 8080
